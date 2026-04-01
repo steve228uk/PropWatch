@@ -1,6 +1,6 @@
 {
   "name": "propwatch",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Detect removed, renamed, and changed test IDs before they break your E2E tests.",
   "type": "module",
   "main": "./dist/index.js",
