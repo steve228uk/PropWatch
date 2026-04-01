@@ -1,0 +1,86 @@
+name: 'PropWatch'
+description: 'Detect test/prop ID changes in CI pipelines'
+author: 'Stephen Radford'
+branding:
+  icon: 'search'
+  color: 'blue'
+
+inputs:
+  base-ref:
+    description: 'Base ref to compare against'
+    required: false
+    default: 'origin/main'
+  config-path:
+    description: 'Path to config file'
+    required: false
+  reporters:
+    description: 'Comma-separated reporters (console,junit,json,github)'
+    required: false
+    default: 'console,junit'
+  output-dir:
+    description: 'Output directory for reports'
+    required: false
+    default: './test-reports'
+  exit-on-breaking:
+    description: 'Fail workflow on breaking changes'
+    required: false
+    default: 'false'
+  report-format:
+    description: 'Monorepo report format (aggregate|per-package|both)'
+    required: false
+    default: 'both'
+  github-token:
+    description: 'GitHub token for PR comments'
+    required: false
+
+outputs:
+  has-breaking-changes:
+    description: 'Whether breaking changes were detected'
+  breaking-count:
+    description: 'Number of breaking changes'
+  added-count:
+    description: 'Number of added IDs'
+  report-path:
+    description: 'Path to generated report(s)'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+    
+    - name: Install PropWatch
+      shell: bash
+      run: |
+        if [ -f "${{ github.action_path }}/package.json" ]; then
+          cd ${{ github.action_path }} && bun install
+          echo "PROPWATCH_BIN=${{ github.action_path }}/dist/cli.js" >> $GITHUB_ENV
+        else
+          bun install -g propwatch
+          echo "PROPWATCH_BIN=$(which propwatch)" >> $GITHUB_ENV
+        fi
+    
+    - name: Run PropWatch
+      id: propwatch
+      shell: bash
+      env:
+        PROPWATCH_BASE_REF: ${{ inputs.base-ref }}
+        PROPWATCH_REPORTERS: ${{ inputs.reporters }}
+        PROPWATCH_OUTPUT_DIR: ${{ inputs.output-dir }}
+        PROPWATCH_EXIT_ON_BREAKING: ${{ inputs.exit-on-breaking }}
+        PROPWATCH_REPORT_FORMAT: ${{ inputs.report-format }}
+        PROPWATCH_GITHUB_TOKEN: ${{ inputs.github-token }}
+        PROPWATCH_CONFIG_PATH: ${{ inputs.config-path }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        bun $PROPWATCH_BIN
+        
+        # Set outputs
+        if [ -f "${{ inputs.output-dir }}/propwatch-results.json" ]; then
+          echo "has-breaking-changes=$(cat ${{ inputs.output-dir }}/propwatch-results.json | grep -o '"hasBreakingChanges":[^,]*' | grep -o 'true\|false')" >> $GITHUB_OUTPUT
+          echo "breaking-count=$(cat ${{ inputs.output-dir }}/propwatch-results.json | grep -o '"breakingCount":[^,]*' | grep -o '[0-9]*')" >> $GITHUB_OUTPUT
+          echo "added-count=$(cat ${{ inputs.output-dir }}/propwatch-results.json | grep -o '"addedCount":[^,]*' | grep -o '[0-9]*')" >> $GITHUB_OUTPUT
+          echo "report-path=${{ inputs.output-dir }}" >> $GITHUB_OUTPUT
+        fi

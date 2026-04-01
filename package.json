@@ -1,0 +1,74 @@
+{
+  "name": "propwatch",
+  "version": "0.1.0",
+  "description": "Detect test/prop ID changes in CI pipelines",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "propwatch": "./dist/cli.js"
+  },
+  "files": [
+    "dist/",
+    "action.yml",
+    "Dockerfile"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "bun run clean && bun run build:js && bun run build:types",
+    "build:js": "bun build src/index.ts src/cli.ts --outdir dist --target node --external zod --external glob --external minimatch --external yaml",
+    "build:types": "tsc --emitDeclarationOnly",
+    "dev": "bun --watch src/cli.ts",
+    "test": "bun test",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/parser": "^7.23.9",
+    "@babel/preset-typescript": "^7.28.5",
+    "@babel/traverse": "^7.23.9",
+    "@babel/types": "^7.23.9",
+    "glob": "^10.3.10",
+    "minimatch": "^9.0.3",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__traverse": "^7.20.5",
+    "@types/node": "^20.11.5",
+    "bun-types": "latest",
+    "typescript": "^5.3.3",
+    "vitepress": "^1.0.0-rc.40",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "testing",
+    "e2e",
+    "ci",
+    "testid",
+    "propwatch",
+    "test-ids",
+    "continuous-integration"
+  ],
+  "author": "Stephen Radford <steve228uk@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steve228uk/propwatch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/steve228uk/propwatch/issues"
+  },
+  "homepage": "https://propwatch.dev"
+}

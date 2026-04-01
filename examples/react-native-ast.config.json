@@ -1,0 +1,28 @@
+{
+  "$schema": "https://propwatch.dev/schema.json",
+  "baseRef": "origin/main",
+  "exitOnBreaking": false,
+  "reporters": ["console", "junit"],
+  "outputDir": "./test-reports",
+  "patterns": [
+    {
+      "name": "react-native-testid",
+      "fileGlobs": ["**/*.tsx", "**/*.jsx"],
+      "parser": "babel",
+      "propNames": ["testID", "testId"],
+      "astOptions": {
+        "sourceType": "module",
+        "plugins": ["jsx", "typescript"]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "**/__tests__/**",
+    "**/node_modules/**",
+    "**/ios/**",
+    "**/android/**",
+    "**/.expo/**"
+  ]
+}

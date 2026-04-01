@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://propwatch.dev/schema.json",
+  "title": "PropWatch Configuration",
+  "description": "Configuration file for PropWatch — detects test/prop ID changes in CI pipelines.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "description": "Config schema version."
+    },
+    "baseRef": {
+      "type": "string",
+      "default": "origin/main",
+      "description": "Git ref to compare the current HEAD against."
+    },
+    "exitOnBreaking": {
+      "type": "boolean",
+      "default": false,
+      "description": "Exit with a non-zero code when breaking changes are detected."
+    },
+    "reporters": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["console", "junit", "json", "github"]
+      },
+      "default": ["console"],
+      "description": "Reporters to use when outputting results."
+    },
+    "outputDir": {
+      "type": "string",
+      "default": "./test-reports",
+      "description": "Directory where file-based reporters write their output."
+    },
+    "monorepo": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Monorepo scanning options.",
+      "properties": {
+        "autoDetect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect packages in the monorepo."
+        },
+        "packages": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "null" }
+          ],
+          "default": null,
+          "description": "Explicit list of package paths to scan. Set to null to use autoDetect."
+        },
+        "reportStrategy": {
+          "type": "string",
+          "enum": ["aggregate", "per-package", "both"],
+          "default": "both",
+          "description": "How to report results across packages."
+        }
+      }
+    },
+    "patterns": {
+      "type": "array",
+      "description": "Patterns defining what PropWatch looks for in your source files.",
+      "items": {
+        "$ref": "#/$defs/pattern"
+      }
+    },
+    "ignorePatterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files to exclude from scanning.",
+      "default": [
+        "**/*.test.{tsx,jsx,ts,js}",
+        "**/*.spec.{tsx,jsx,ts,js}",
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/.git/**"
+      ]
+    }
+  },
+  "$defs": {
+    "pattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "fileGlobs"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name for this pattern."
+        },
+        "fileGlobs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Glob patterns selecting which files this pattern applies to."
+        },
+        "parser": {
+          "type": "string",
+          "enum": ["regex", "babel"],
+          "default": "regex",
+          "description": "Parser to use for extracting values. Use 'regex' for simple attribute matching or 'babel' for full AST traversal."
+        },
+        "propPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Regex patterns (with a capture group) used by the regex parser to extract values."
+        },
+        "propNames": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "JSX attribute names to extract, used by the babel parser."
+        },
+        "astOptions": {
+          "type": "object",
+          "description": "Options passed directly to @babel/parser. Overrides the defaults set by PropWatch.",
+          "properties": {
+            "sourceType": {
+              "type": "string",
+              "enum": ["module", "script", "unambiguous"]
+            },
+            "plugins": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": true
+        },
+        "junitProperties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key/value pairs emitted as <property> elements inside each JUnit <testcase> for this pattern. Not included by default — only add when your CI platform requires them. Example: Bitbucket reads 'bbc.summary.kind' to surface results in the Tests tab."
+        }
+      }
+    }
+  }
+}
