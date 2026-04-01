@@ -20,7 +20,7 @@ function parseArgs(): CLIArgs {
   const argv = process.argv.slice(2);
   const args: CLIArgs = {
     base: process.env.PROPWATCH_BASE_REF || 'origin/main',
-    reporters: process.env.PROPWATCH_REPORTERS?.split(',').map(s => s.trim()) || ['console'],
+    reporters: process.env.PROPWATCH_REPORTERS?.split(',').map(s => s.trim()) ?? [],
     outputDir: process.env.PROPWATCH_OUTPUT_DIR || './test-reports',
     exitOnBreaking: process.env.PROPWATCH_EXIT_ON_BREAKING === 'true',
     packages: false,
@@ -51,7 +51,7 @@ function parseArgs(): CLIArgs {
         break;
       case '--reporter':
       case '-r':
-        args.reporters.push(argv[++i]);
+        args.reporters.push(...argv[++i].split(',').map(s => s.trim()));
         break;
       case '--output':
       case '-o':
