@@ -1,7 +1,7 @@
 {
   "name": "propwatch",
   "version": "0.1.0",
-  "description": "Detect test/prop ID changes in CI pipelines",
+  "description": "Detect removed, renamed, and changed test IDs before they break your E2E tests.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
