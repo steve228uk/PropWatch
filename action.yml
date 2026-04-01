@@ -1,4 +1,4 @@
-name: 'PropWatch'
+name: 'steve228uk/propwatch'
 description: 'Detect removed, renamed, and changed test IDs before they break your E2E tests'
 author: 'Stephen Radford'
 branding:
