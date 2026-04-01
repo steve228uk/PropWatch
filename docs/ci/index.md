@@ -13,7 +13,7 @@ PropWatch is designed to run in pull request pipelines. The general pattern is t
 |----------|-------|--------|
 | GitHub Actions | [→](/ci/github-actions) | Official action |
 | Bitbucket Pipelines | [→](/ci/bitbucket) | `bunx` or Docker |
-| GitLab CI | [→](/ci/gitlab) | `npx` or Docker |
+| GitLab CI | [→](/ci/gitlab) | Docker or `npx` |
 | CircleCI | [→](/ci/circleci) | `npx` or Docker |
 | Azure DevOps | [→](/ci/azure) | `npx` or Docker |
 | Jenkins | [→](/ci/jenkins) | Docker or `npx` |
