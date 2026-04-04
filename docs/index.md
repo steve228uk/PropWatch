@@ -2,11 +2,12 @@
 layout: home
 title: PropWatch — Guard your E2E selectors in CI
 titleTemplate: ':title'
+description: Catch removed or renamed test IDs in CI before they break your Playwright, Cypress, or Appium tests. Works with any framework, zero config to start.
 
 hero:
   name: PropWatch
   text: Guard your E2E selectors in CI
-  tagline: Detects removed, renamed, and changed test IDs before they break your E2E test suite.
+  tagline: Detects removed, renamed, and changed test IDs in your PR diff — before they break Playwright, Cypress, Appium, or your tracking tools.
   actions:
     - theme: brand
       text: Get Started
