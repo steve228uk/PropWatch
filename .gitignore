@@ -60,3 +60,5 @@ Thumbs.db
 test-reports/
 *.xml
 !junit.xml
+
+.claude/

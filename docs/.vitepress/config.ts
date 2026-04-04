@@ -2,16 +2,31 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'PropWatch',
-  description: 'Detect test ID changes in CI pipelines before they break your E2E tests.',
+  description: 'Catch removed or renamed test IDs in CI before they break your Playwright, Cypress, or Appium tests. Works with any framework, zero config to start.',
   base: '/',
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#3b82f6' }],
+    // Open Graph
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'PropWatch' }],
+    ['meta', { property: 'og:url', content: 'https://propwatch.dev' }],
+    ['meta', { property: 'og:title', content: 'PropWatch — Guard your E2E selectors in CI' }],
+    ['meta', { property: 'og:description', content: 'Catch removed or renamed test IDs in CI before they break your Playwright, Cypress, or Appium tests. Works with any framework, zero config to start.' }],
+    ['meta', { property: 'og:image', content: 'https://propwatch.dev/og.png' }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    // Twitter / X
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: 'PropWatch — Guard your E2E selectors in CI' }],
+    ['meta', { name: 'twitter:description', content: 'Catch removed or renamed test IDs in CI before they break your Playwright, Cypress, or Appium tests. Works with any framework, zero config to start.' }],
+    ['meta', { name: 'twitter:image', content: 'https://propwatch.dev/og.png' }],
   ],
   lastUpdated: true,
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/' },
+      { text: 'Use Cases', link: '/guide/use-cases' },
       { text: 'Configuration', link: '/config/' },
       { text: 'CI/CD', link: '/ci/' },
     ],
@@ -28,6 +43,7 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Quick Start', link: '/guide/quick-start' },
             { text: 'How It Works', link: '/guide/how-it-works' },
+            { text: 'Use Cases', link: '/guide/use-cases' },
           ],
         },
       ],
